@@ -1,21 +1,21 @@
+// scripts/migrate.ts
 import { config } from 'dotenv';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
 import postgres from 'postgres';
 
-config({
-  path: '.env.local',
-});
+config({ path: '.env.local' });
 
 const runMigrate = async () => {
   if (!process.env.POSTGRES_URL) {
     throw new Error('POSTGRES_URL is not defined');
   }
 
+  // Connect to Supabase's Postgres
   const connection = postgres(process.env.POSTGRES_URL, { max: 1 });
   const db = drizzle(connection);
 
-  console.log('⏳ Running migrations...');
+  console.log('⏳ Running migrations on Supabase...');
 
   const start = Date.now();
   await migrate(db, { migrationsFolder: './lib/db/migrations' });
